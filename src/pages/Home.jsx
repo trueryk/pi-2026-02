@@ -4,7 +4,7 @@ export default function Home() {
     const [search, setSearch] = useState('')
     return (
         <>
-            <div className='grid grid-cols-7 h-[6rem] items-center'>
+            <header className='grid grid-cols-7 h-[6rem] items-center'>
                 <div className='col-span-5 text-center grid grid-cols-5 items-center'>
                     <div className='logo col-span-1 justify-center flex'>
                         <img className='w-[2.9rem]' src='/images/Logo.jpg' alt='' />
@@ -16,7 +16,8 @@ export default function Home() {
                     </div>
                 </div>
                 <div className='col-span-2 text-center'>B</div>
-            </div>
+            </header>
+            
             <div className='bg-linear-to-b from-[#001f65] to-[#004dff] h-[60vh] justify-end flex'>
                 <div className='dots-bg w-[30vw] h-[40vh]'></div>
             </div>

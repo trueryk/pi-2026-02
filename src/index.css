@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 .dots-bg {
   background-image: radial-gradient(#8c52ff 15%, transparent 15%);
