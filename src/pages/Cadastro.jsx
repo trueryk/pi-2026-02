@@ -1,5 +1,6 @@
 import { useMask } from "@react-input/mask"
 import { useState, useEffect } from "react"
+import { replace, useNavigate } from "react-router-dom";
 import { cpfValidator } from 'cpf-cnpj-validator'
 
 export default function Cadastro() {
@@ -13,10 +14,12 @@ export default function Cadastro() {
         replacement: { _: /\d/ }
     })
 
+    const navegar = useNavigate()
     const [cpf, setCpf] = useState('')
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [nasc, setNasc] = useState('')
+    const [bday, setBday] = useState('')
     const [senha, setSenha] = useState('')
     // Endereço com API dos correios
     const [cep, setCep] = useState('')
@@ -27,6 +30,7 @@ export default function Cadastro() {
     const [rua, setRua] = useState('')
     const [numero, setNumero] = useState('')
     const [complemento, setComplemento] = useState('')
+    const [resposta, setResposta] = useState([])
 
     useEffect(() => {
         if (cep.length === 10) {
@@ -47,17 +51,64 @@ export default function Cadastro() {
         }
     }, [cep]);
 
+    useEffect(()=>{
+
+        setBday(nasc.slice(0,4) + "-" + nasc.slice(5,7) + "-" + nasc.slice(8,10))
+
+    },[nasc])
+
+    function enviarCadastro(){
+
+        fetch(`http://localhost:8080/api/auth/register`,{
+
+            method: "POST",
+            body: JSON.stringify({
+                "cpf": cpf,
+                "name": nome,
+                "email": email,
+                "password": senha,
+                "birthday": bday,
+                "address": {
+                    "cep": cep.replace(/[.,/#!$%^&*;:{}=\_`~()?"'']/g, ""),
+                    "uf": estado,
+                    "municipio": cidade,
+                    "bairro": bairro,
+                    "logradouro": rua,
+                    "numero": numero,
+                    "complemento": complemento
+                }
+            }),
+    headers: {
+    "Content-type": "application/json; charset=UTF-8"
+  }
+
+    })
+    .then((response) => response.json())
+    .then((json) => setResposta(json))
+    }
+
+    useEffect(()=>{
+
+        if(resposta.id != null){
+
+            window.alert("Cadastro realizado com sucesso, prossiga com o login para continuar!")
+
+            navegar("/entrar", {replace: true, relative: "path"})
+
+        }
+
+    },[resposta])
 
     return (
         <>
             <div className='container w-full h-[100vh] flex items-center justify-center bg-[#144975] h-[60vh]'>
                 <section className='login-card h-[85vh] w-[60vw] shadow-[0_0_20px_rgba(0,0,0,0.25)] rounded bg-white'>
-                    <h1 className='text-center py-3 text-[1.5rem]'>CADASTRO</h1>
+                    <h1 className='text-center py-3 text-[1.5rem] text-black'>CADASTRO</h1>
                     <form className=''>
                         <div className='grid grid-cols-2 py-2'>
                             <div className='flex flex-col px-5'>
                                 {/* CPF */}
-                                <div className='input-container flex flex-col'>
+                                <div className='input-container flex flex-col text-black'>
                                     <label htmlFor='cpf'>CPF</label>
                                     <input className='ring-1 rounded ps-2 py-1'
                                         type='text'
@@ -82,7 +133,7 @@ export default function Cadastro() {
                                     }
                                 </div>
                                 {/* Nome */}
-                                <div className='input-container flex flex-col mb-4'>
+                                <div className='input-container flex flex-col mb-4 text-black'>
                                     <label htmlFor='nome'>Nome</label>
                                     <input className='ring-1 rounded ps-2 py-1'
                                         type='text'
@@ -94,7 +145,7 @@ export default function Cadastro() {
                                         onChange={(e) => { setNome(e.target.value) }} />
                                 </div>
                                 {/* Email */}
-                                <div className='input-container flex flex-col mb-4'>
+                                <div className='input-container flex flex-col mb-4 text-black'>
                                     <label htmlFor='email'>E-mail</label>
                                     <input className='ring-1 rounded ps-2 py-1'
                                         type='email'
@@ -106,7 +157,7 @@ export default function Cadastro() {
                                         onChange={(e) => { setEmail(e.target.value) }} />
                                 </div>
                                 {/* Senha */}
-                                <div className='input-container flex flex-col mb-4'>
+                                <div className='input-container flex flex-col mb-4 text-black'>
                                     <label htmlFor='password'>Senha</label>
                                     <input className='ring-1 rounded ps-2 py-1'
                                         type='password'
@@ -118,7 +169,7 @@ export default function Cadastro() {
                                         onChange={(e) => { setSenha(e.target.value) }} />
                                 </div>
                                 {/* Aniversário */}
-                                <div className='input-container flex flex-col'>
+                                <div className='input-container flex flex-col text-black'>
                                     <label htmlFor='nasc'>Data de Nascimento</label>
                                     <input className='ring-1 rounded ps-2 py-1'
                                         type='date'
@@ -129,7 +180,7 @@ export default function Cadastro() {
                                         onChange={(e) => { setNasc(e.target.value) }} />
                                 </div>
                             </div>
-                            <div className='flex flex-col px-5'>
+                            <div className='flex flex-col px-5 text-black'>
                                 {/* CEP */}
                                 <div className='input-container flex flex-col'>
                                     <label htmlFor='cep'>CEP</label>
@@ -230,11 +281,12 @@ export default function Cadastro() {
                             </div>
                         </div>
                         <div className="flex justify-center mt-2">
-                            <button className="hover:ring-1 hover:ring-[#144975] text-white bg-[#144975] hover:bg-white hover:text-[#144975] px-3 py-2 rounded text-[1rem] hover:shadow-[0_0_5px_#144975] duration-200">
+                            <button type="button" disabled={erro} className={`disabled:bg-black hover:ring-1 hover:ring-[#144975] text-white bg-[#144975] hover:bg-white hover:text-[#144975] px-3 py-2 rounded text-[1rem] hover:shadow-[0_0_5px_#144975] duration-200`} onClick={()=>{enviarCadastro()}}>
                                 Cadastrar
                             </button>
                         </div>
                     </form>
+                    
                 </section>
             </div>
         </>
