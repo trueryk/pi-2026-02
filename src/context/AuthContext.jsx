@@ -38,7 +38,8 @@ export function AuthProvider({ children }) {
     async function initAuth() {
       const storedToken = getToken();
       if (storedToken) {
-        setTokenState(storedToken);
+        const refreshed = await api.refreshToken();
+        setTokenState(refreshed || storedToken);
         const me = await api.getMe();
         if (me) {
           setUser(me);
@@ -116,6 +117,10 @@ export function AuthProvider({ children }) {
         const updatedUser = { ...user, providerId: res.data.id };
         setUser(updatedUser);
         localStorage.setItem('conecta_user', JSON.stringify(updatedUser));
+      }
+      const refreshed = getToken();
+      if (refreshed) {
+        setTokenState(refreshed);
       }
       return { success: true };
     }

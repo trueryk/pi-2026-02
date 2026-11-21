@@ -47,6 +47,25 @@ export const api = {
     }
   },
 
+  async refreshToken() {
+    try {
+      const res = await fetch(`${API_RELATIONAL}/auth/refresh`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.token) {
+          setToken(data.token);
+          return data.token;
+        }
+      }
+    } catch (_e) {
+      console.warn('Não foi possível atualizar o token com os ids do usuário');
+    }
+    return null;
+  },
+
   async register(userData) {
     try {
       const res = await fetch(`${API_RELATIONAL}/auth/register`, {
@@ -172,7 +191,11 @@ export const api = {
         headers: getAuthHeaders(),
         body: JSON.stringify(providerData)
       });
-      if (res.ok) return { success: true, data: await res.json() };
+      if (res.ok) {
+        const data = await res.json();
+        await this.refreshToken();
+        return { success: true, data };
+      }
       const err = await res.json().catch(() => ({}));
       return { success: false, error: err.message || 'Erro ao registrar prestador' };
     } catch (_e) {
