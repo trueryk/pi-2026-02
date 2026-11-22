@@ -50,7 +50,7 @@ export default function ServiceCard({ service }) {
           className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all cursor-pointer shadow-md ${
             isFav 
               ? 'bg-rose-500 text-white hover:bg-rose-600 scale-105' 
-              : 'bg-white/80 hover:bg-white text-slate-700 hover:text-rose-500'
+              : 'bg-white/80 hover:bg-white text-[#001f65] hover:text-rose-500'
           }`}
           title={isFav ? "Remover dos interesses" : "Salvar como interesse"}
         >
@@ -70,7 +70,7 @@ export default function ServiceCard({ service }) {
         <div>
           {/* Provider row */}
           <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5 gap-2">
-            <span className="truncate font-medium text-slate-700">
+            <span className="truncate font-medium text-[#001f65]">
               {service.prestadorNome || "Profissional Verificado"}
             </span>
             <span className="shrink-0 flex items-center text-emerald-600 text-[11px] font-semibold bg-emerald-50 px-2 py-0.5 rounded-full">

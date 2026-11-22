@@ -6,13 +6,13 @@ import RatingStars from '../components/RatingStars';
 import ModalHire from '../components/ModalHire';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { 
-  HeartIcon, 
-  ShieldCheckIcon, 
-  ClockIcon, 
-  CalendarIcon, 
-  ArrowLeftIcon, 
-  EditIcon, 
+import {
+  HeartIcon,
+  ShieldCheckIcon,
+  ClockIcon,
+  CalendarIcon,
+  ArrowLeftIcon,
+  EditIcon,
   TrashIcon,
   HelpCircleIcon
 } from '../components/Icons';
@@ -65,12 +65,12 @@ export default function ServiceDetails() {
         <div className="flex-1 flex items-center justify-center py-20 px-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center border border-slate-200 shadow-lg">
             <h2 className="text-xl font-bold text-slate-900 mb-2">Serviço não encontrado</h2>
-            <p className="text-xs text-slate-500 mb-6">
+            <p className=" text-slate-500 mb-6">
               O serviço que você tentou acessar não existe ou foi removido pelo prestador.
             </p>
             <Link
               to="/"
-              className="px-6 py-2.5 bg-[#001f65] text-white text-xs font-bold rounded-full hover:bg-[#0034a8]"
+              className="px-6 py-2.5 bg-[#001f65] text-white  font-bold rounded-full hover:bg-[#0034a8]"
             >
               Voltar para o Início
             </Link>
@@ -107,13 +107,13 @@ export default function ServiceDetails() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        
+
         {/* Breadcrumb & Back */}
         <div className="flex items-center justify-between mb-6">
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#001f65] transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5  font-semibold text-slate-500 hover:text-[#001f65] transition-colors cursor-pointer"
           >
             <ArrowLeftIcon className="w-4 h-4" />
             <span>Voltar para a lista</span>
@@ -123,7 +123,7 @@ export default function ServiceDetails() {
             <div className="flex items-center gap-2">
               <Link
                 to={`/servicos/editar/${service.id}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-[#001f65] hover:bg-blue-100 rounded-lg text-xs font-bold transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-[#001f65] hover:bg-blue-100 rounded-lg  font-bold transition-colors"
               >
                 <EditIcon className="w-3.5 h-3.5" />
                 <span>Editar Serviço</span>
@@ -132,7 +132,7 @@ export default function ServiceDetails() {
                 type="button"
                 onClick={handleDeleteService}
                 disabled={deleteLoading}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg  font-bold transition-colors cursor-pointer"
               >
                 <TrashIcon className="w-3.5 h-3.5" />
                 <span>Excluir</span>
@@ -142,12 +142,12 @@ export default function ServiceDetails() {
         </div>
 
         {/* Main Product Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 border border-slate-200/80 rounded-3xl">
+
           {/* Left Column: Image Gallery (7 cols) */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-7">
             {/* Main Featured Image */}
-            <div className="aspect-16/10 w-full rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/80 shadow-md relative group">
+            <div className="aspect-16/10 w-full overflow-hidden bg-slate-100 border border-slate-200/80 shadow-md relative group">
               <img
                 src={images[selectedImage]}
                 alt={service.nome}
@@ -157,7 +157,7 @@ export default function ServiceDetails() {
                 }}
               />
               {service.categoria && (
-                <span className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full">
+                <span className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md text-white  font-semibold px-3 py-1 rounded-full">
                   {service.categoria}
                 </span>
               )}
@@ -171,11 +171,10 @@ export default function ServiceDetails() {
                     key={idx}
                     type="button"
                     onClick={() => setSelectedImage(idx)}
-                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
-                      selectedImage === idx 
-                        ? 'border-[#001f65] ring-2 ring-[#001f65]/20 scale-105' 
-                        : 'border-slate-200 opacity-70 hover:opacity-100'
-                    }`}
+                    className={`w-20 h-20 overflow-hidden transition-all cursor-pointer shrink-0 ${selectedImage === idx
+                        ? 'scale-105'
+                        : 'opacity-70 hover:opacity-100'
+                      }`}
                   >
                     <img src={img} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover" />
                   </button>
@@ -184,7 +183,7 @@ export default function ServiceDetails() {
             )}
 
             {/* Description Card */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs mt-6">
+            <div className="bg-white p-6 ">
               <h2 className="text-lg font-bold text-slate-900 mb-3">Descrição Detalhada</h2>
               <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
                 {service.descricao}
@@ -192,21 +191,21 @@ export default function ServiceDetails() {
             </div>
 
             {/* Weekly Availability Card */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
+            <div className="bg-white p-6">
               <h2 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-                <ClockIcon className="w-5 h-5 text-[#0cc0df]" />
+                <ClockIcon className="w-5 h-5 text-[#001f65]" />
                 Horários de Atendimento Disponíveis
               </h2>
               {service.disponibilidadesSemanais && service.disponibilidadesSemanais.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {service.disponibilidadesSemanais.map((disp, idx) => (
-                    <div 
-                      key={idx} 
-                      className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between"
+                    <div
+                      key={idx}
+                      className="p-3 rounded-2xl bg-slate-50 border border-[#001f65] flex items-center justify-between"
                     >
                       <div>
-                        <p className="font-bold text-xs text-slate-800">{disp.diaSemana}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{disp.horario}</p>
+                        <p className="font-bold  text-slate-800">{disp.diaSemana}</p>
+                        <p className=" text-slate-500 mt-0.5">{disp.horario}</p>
                       </div>
                       <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
                         Disponível
@@ -215,18 +214,18 @@ export default function ServiceDetails() {
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-slate-500 italic">
+                <p className=" text-slate-500 italic">
                   O prestador combina o horário de atendimento diretamente após a solicitação.
                 </p>
               )}
             </div>
 
             {/* Avaliações do Serviço */}
-            <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs">
+            <div className="bg-white p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h2 className="text-lg font-bold text-slate-900">Avaliações dos Clientes</h2>
-                  <p className="text-xs text-slate-500">Comentários de quem já contratou</p>
+                  <p className=" text-slate-500">Comentários de quem já contratou</p>
                 </div>
                 <div className="text-right">
                   <div className="flex items-center gap-1.5 justify-end">
@@ -246,19 +245,19 @@ export default function ServiceDetails() {
                   {reviews.map((rev, idx) => (
                     <div key={idx} className="pt-3 first:pt-0">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-bold text-xs text-slate-800">
+                        <span className="font-bold  text-slate-800">
                           {rev.usuarioNome || "Cliente Verificado"}
                         </span>
                         <RatingStars rating={rev.nota} size="w-3 h-3" showNumber={true} />
                       </div>
-                      <p className="text-xs text-slate-600 leading-relaxed">
+                      <p className=" text-slate-600 leading-relaxed">
                         "{rev.comentario}"
                       </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="py-6 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl">
+                <div className="py-6 text-center  text-slate-500 bg-slate-50 rounded-2xl">
                   Ainda não há avaliações para este serviço. Seja o primeiro a contratar e avaliar!
                 </div>
               )}
@@ -267,20 +266,20 @@ export default function ServiceDetails() {
           </div>
 
           {/* Right Column: Sticky Action & Provider Card (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
-            
+          <div className="lg:col-span-5">
+
             {/* Action Box */}
-            <div className="sticky top-28 bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xl space-y-6">
-              
+            <div className="sticky top-28 bg-white p-6">
+
               <div>
-                <span className="text-xs uppercase font-bold tracking-wider text-slate-400">
+                <span className=" uppercase font-bold tracking-wider text-slate-400">
                   Valor da Contratação
                 </span>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="text-3xl sm:text-4xl font-black text-[#001f65]">
                     R$ {Number(service.preco || 0).toFixed(2).replace('.', ',')}
                   </span>
-                  <span className="text-xs text-slate-500">/ serviço</span>
+                  <span className=" text-slate-500">/ serviço</span>
                 </div>
               </div>
 
@@ -299,9 +298,9 @@ export default function ServiceDetails() {
                 <button
                   type="button"
                   onClick={() => setShowHireModal(true)}
-                  className="w-full py-3.5 bg-gradient-to-r from-[#001f65] to-[#003db3] hover:from-[#002882] hover:to-[#0048d3] text-white font-bold text-sm rounded-2xl shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                  className="w-full py-3.5 ring-1 ring-[#001f65] text-[#001f65] hover:bg-[#001f65] hover:text-white font-bold text-sm rounded-2xl shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 group"
                 >
-                  <CalendarIcon className="w-5 h-5 text-[#0cc0df] group-hover:scale-110 transition-transform" />
+                  <CalendarIcon className="w-5 h-5 text-[#001f65] group-hover:text-white group-hover:scale-110 transition-transform" />
                   <span>Contratar Serviço Agora</span>
                 </button>
 
@@ -314,11 +313,10 @@ export default function ServiceDetails() {
                     }
                     toggleFavorite(service.id);
                   }}
-                  className={`w-full py-3 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 border ${
-                    isFav
+                  className={`w-full py-3 rounded-2xl  font-bold transition-all cursor-pointer flex items-center justify-center gap-2 border ${isFav
                       ? 'bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100'
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                  }`}
+                    }`}
                 >
                   <HeartIcon className="w-4 h-4" filled={isFav} />
                   <span>{isFav ? 'Salvo nos Interesses' : 'Salvar como Interesse'}</span>
@@ -326,41 +324,16 @@ export default function ServiceDetails() {
               </div>
 
               {/* Guarantee highlights */}
-              <div className="pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-500">
+              <div className="pt-4 border-t border-slate-100 space-y-2  text-slate-500">
                 <div className="flex items-center gap-2">
                   <ShieldCheckIcon className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Garantia de atendimento ou seu dinheiro de volta</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <ClockIcon className="w-4 h-4 text-[#0cc0df] shrink-0" />
+                  <ClockIcon className="w-4 h-4 text-[#001f65] shrink-0" />
                   <span>Agendamento rápido com confirmação</span>
                 </div>
               </div>
-
-              {/* Provider Information Card */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                  Sobre o Prestador
-                </span>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#001f65] to-[#0cc0df] text-white flex items-center justify-center font-bold text-base shadow-xs">
-                    {service.prestadorNome ? service.prestadorNome[0] : 'P'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm text-slate-900 truncate">
-                      {service.prestadorNome || "Profissional Cadastrado"}
-                    </p>
-                    <p className="text-xs text-slate-500 truncate">
-                      {service.prestadorEspecializacao || "Especialista em Serviços"}
-                    </p>
-                    <div className="mt-1 flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
-                      <ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Prestador Verificado</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
           </div>

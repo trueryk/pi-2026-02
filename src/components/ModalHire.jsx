@@ -30,7 +30,7 @@ export default function ModalHire({ service, onClose, onHired }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-full border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50"
+              className="px-4 py-2.5 rounded-full border border-slate-200 text-[#001f65] text-sm font-semibold hover:"
             >
               Cancelar
             </button>
@@ -96,7 +96,7 @@ export default function ModalHire({ service, onClose, onHired }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-full border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 cursor-pointer"
+                className="px-5 py-2.5 rounded-full border border-slate-200 text-[#001f65] text-sm font-semibold hover: cursor-pointer"
               >
                 Continuar Navegando
               </button>
@@ -116,11 +116,11 @@ export default function ModalHire({ service, onClose, onHired }) {
           <form onSubmit={handleHireSubmit}>
             <div className="flex justify-between items-start pb-4 border-b border-slate-100">
               <div>
-                <span className="text-xs uppercase font-bold tracking-wider text-[#0cc0df]">
+                <span className=" uppercase font-bold  text-[#001f65]">
                   Contratação Direta
                 </span>
                 <h3 className="text-lg font-bold text-slate-900">{service.nome}</h3>
-                <p className="text-xs text-slate-500">
+                <p className=" text-slate-500">
                   Prestador: {service.prestadorNome || "Profissional Verificado"}
                 </p>
               </div>
@@ -134,27 +134,27 @@ export default function ModalHire({ service, onClose, onHired }) {
             </div>
 
             {error && (
-              <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl">
+              <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-700  rounded-xl">
                 {error}
               </div>
             )}
 
             {/* Price Preview */}
-            <div className="my-4 p-4 bg-slate-50 rounded-2xl flex items-center justify-between border border-slate-100">
+            <div className="my-4 p-4  rounded-2xl flex items-center justify-between border border-slate-100">
               <div>
-                <span className="text-xs text-slate-500">Valor do Serviço</span>
+                <span className=" text-slate-500">Valor do Serviço</span>
                 <p className="text-2xl font-black text-[#001f65]">
                   R$ {Number(service.preco || 0).toFixed(2).replace('.', ',')}
                 </p>
               </div>
-              <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full">
+              <span className=" font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full">
                 Garantia Conecta
               </span>
             </div>
 
             {/* Schedule Selection */}
             <div className="space-y-3 mb-4">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+              <label className="block  font-bold uppercase  text-[#001f65]">
                 Escolha o Horário de Atendimento
               </label>
 
@@ -165,14 +165,14 @@ export default function ModalHire({ service, onClose, onHired }) {
                       type="button"
                       key={idx}
                       onClick={() => setSelectedSlot(`${disp.diaSemana} - ${disp.horario}`)}
-                      className={`p-2.5 text-left rounded-xl border text-xs font-medium transition-all cursor-pointer ${
+                      className={`p-2.5 text-left rounded-xl border  font-medium transition-all cursor-pointer ${
                         selectedSlot === `${disp.diaSemana} - ${disp.horario}`
                           ? 'border-[#001f65] bg-blue-50/70 text-[#001f65] ring-2 ring-[#001f65]/20 font-bold'
-                          : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
+                          : 'border-slate-200 hover:border-slate-300 text-[#001f65] bg-white'
                       }`}
                     >
                       <p className="flex items-center gap-1.5">
-                        <ClockIcon className="w-3.5 h-3.5 text-[#0cc0df]" />
+                        <ClockIcon className="w-3.5 h-3.5 text-[#001f65]" />
                         <span>{disp.diaSemana}</span>
                       </p>
                       <p className="text-[11px] text-slate-500 mt-0.5">{disp.horario}</p>
@@ -180,14 +180,14 @@ export default function ModalHire({ service, onClose, onHired }) {
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-slate-500 italic">
+                <p className=" text-slate-500 italic">
                   Horário flexível conforme disponibilidade do prestador.
                 </p>
               )}
 
               {/* Custom Date Picker */}
               <div className="mt-2">
-                <label className="block text-xs text-slate-500 mb-1">
+                <label className="block  text-slate-500 mb-1">
                   Ou agende para uma data específica:
                 </label>
                 <div className="relative">
@@ -195,14 +195,14 @@ export default function ModalHire({ service, onClose, onHired }) {
                     type="date"
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-slate-700"
+                    className="w-full px-3 py-2  rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-[#001f65]"
                   />
                 </div>
               </div>
             </div>
 
             {/* Registered Address Check */}
-            <div className="mb-4 p-3 bg-blue-50/60 rounded-2xl border border-blue-100 text-xs">
+            <div className="mb-4 p-3 bg-blue-50/60 rounded-2xl border border-blue-100 ">
               <div className="flex items-start gap-2">
                 <MapPinIcon className="w-4 h-4 text-[#001f65] shrink-0 mt-0.5" />
                 <div>
@@ -223,7 +223,7 @@ export default function ModalHire({ service, onClose, onHired }) {
 
             {/* Observações */}
             <div className="mb-5">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label className="block  font-bold uppercase  text-[#001f65] mb-1">
                 Observações para o Prestador (Opcional)
               </label>
               <textarea
@@ -231,7 +231,7 @@ export default function ModalHire({ service, onClose, onHired }) {
                 placeholder="Ex: portaria libera entrada às 09h; favor trazer escada..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full p-2.5 text-xs rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-slate-700"
+                className="w-full p-2.5  rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-[#001f65]"
               />
             </div>
 
@@ -240,14 +240,14 @@ export default function ModalHire({ service, onClose, onHired }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-full border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer"
+                className="px-4 py-2 rounded-full border border-slate-200 text-[#001f65]  font-semibold hover: cursor-pointer"
               >
                 Voltar
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-2.5 bg-[#001f65] hover:bg-[#0034a8] text-white text-xs font-bold rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 bg-[#001f65] hover:bg-[#0034a8] text-white  font-bold rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
               >
                 {submitting ? 'Confirmando...' : 'Confirmar e Contratar'}
               </button>
