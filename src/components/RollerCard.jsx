@@ -1,4 +1,4 @@
-export default function RollerCard(param) {
+export default function RollerCard() {
     return (
         <>
             <li>

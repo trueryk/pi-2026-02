@@ -1,294 +1,429 @@
-import { useMask } from "@react-input/mask"
-import { useState, useEffect } from "react"
-import { replace, useNavigate } from "react-router-dom";
-import { cpfValidator } from 'cpf-cnpj-validator'
+import { useMask } from "@react-input/mask";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { cpfValidator } from 'cpf-cnpj-validator';
+import { api } from "../services/api";
+import { ShieldCheckIcon, UserIcon } from "../components/Icons";
 
 export default function Cadastro() {
-    const cpfRef = useMask({
-        mask: '___.___.___-__',
-        replacement: { _: /\d/ }
-    })
+  const cpfRef = useMask({
+    mask: '___.___.___-__',
+    replacement: { _: /\d/ }
+  });
 
-    const cepRef = useMask({
-        mask: '__.___-___',
-        replacement: { _: /\d/ }
-    })
+  const cepRef = useMask({
+    mask: '__.___-___',
+    replacement: { _: /\d/ }
+  });
 
-    const navegar = useNavigate()
-    const [cpf, setCpf] = useState('')
-    const [nome, setNome] = useState('')
-    const [email, setEmail] = useState('')
-    const [nasc, setNasc] = useState('')
-    const [bday, setBday] = useState('')
-    const [senha, setSenha] = useState('')
-    // Endereço com API dos correios
-    const [cep, setCep] = useState('')
-    const [bairro, setBairro] = useState('')
-    const [cidade, setCidade] = useState('')
-    const [estado, setEstado] = useState('')
-    const [erro, setErro] = useState(false)
-    const [rua, setRua] = useState('')
-    const [numero, setNumero] = useState('')
-    const [complemento, setComplemento] = useState('')
-    const [resposta, setResposta] = useState([])
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (cep.length === 10) {
-            fetch(`https://viacep.com.br/ws/${cep.replace(/[.,/#!$%^&*;:{}=\-_`~()?"'']/g, "")}/json/`)
-                .then(response => response.json())
-                .then(data => {
-                    setBairro(data.bairro);
-                    setCidade(data.localidade);
-                    setEstado(data.uf);
-                    setRua(data.logradouro);
-                    setErro(data.erro);
-                });
-        } else {
+  // Personal Info
+  const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [nasc, setNasc] = useState('');
+  const [senha, setSenha] = useState('');
+
+  // Address Info
+  const [cep, setCep] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [rua, setRua] = useState('');
+  const [numero, setNumero] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [buscandoCep, setBuscandoCep] = useState(false);
+  const [erroCep, setErroCep] = useState(false);
+
+  // Status & Submit
+  const [loading, setLoading] = useState(false);
+  const [mensagemErro, setMensagemErro] = useState('');
+  const [mensagemSucesso, setMensagemSucesso] = useState('');
+
+  // ViaCEP integration
+  useEffect(() => {
+    const rawCep = cep.replace(/\D/g, "");
+    if (rawCep.length === 8) {
+      setBuscandoCep(true);
+      setErroCep(false);
+      fetch(`https://viacep.com.br/ws/${rawCep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.erro) {
+            setErroCep(true);
             setBairro('');
             setCidade('');
             setEstado('');
             setRua('');
-        }
-    }, [cep]);
+          } else {
+            setBairro(data.bairro || '');
+            setCidade(data.localidade || '');
+            setEstado(data.uf || '');
+            setRua(data.logradouro || '');
+            setErroCep(false);
+          }
+        })
+        .catch(() => {
+          setErroCep(true);
+        })
+        .finally(() => {
+          setBuscandoCep(false);
+        });
+    } else {
+      setErroCep(false);
+    }
+  }, [cep]);
 
-    useEffect(()=>{
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        setBday(nasc.slice(0,4) + "-" + nasc.slice(5,7) + "-" + nasc.slice(8,10))
-
-    },[nasc])
-
-    function enviarCadastro(){
-
-        fetch(`http://localhost:8080/api/auth/register`,{
-
-            method: "POST",
-            body: JSON.stringify({
-                "cpf": cpf,
-                "name": nome,
-                "email": email,
-                "password": senha,
-                "birthday": bday,
-                "address": {
-                    "cep": cep.replace(/[.,/#!$%^&*;:{}=\_`~()?"'']/g, ""),
-                    "uf": estado,
-                    "municipio": cidade,
-                    "bairro": bairro,
-                    "logradouro": rua,
-                    "numero": numero,
-                    "complemento": complemento
-                }
-            }),
-    headers: {
-    "Content-type": "application/json; charset=UTF-8"
-  }
-
-    })
-    .then((response) => response.json())
-    .then((json) => setResposta(json))
+    if (cpf.length === 14 && !cpfValidator.isValid(cpf)) {
+      setMensagemErro('O CPF informado é inválido. Por favor, verifique.');
+      return;
     }
 
-    useEffect(()=>{
+    if (!numero) {
+      setMensagemErro('O número do endereço é obrigatório.');
+      return;
+    }
 
-        if(resposta.id != null){
+    setLoading(true);
+    setMensagemErro('');
 
-            window.alert("Cadastro realizado com sucesso, prossiga com o login para continuar!")
+    const payload = {
+      cpf: cpf,
+      name: nome,
+      email: email,
+      password: senha,
+      birthday: nasc,
+      address: {
+        cep: cep.replace(/\D/g, ""),
+        uf: estado,
+        municipio: cidade,
+        bairro: bairro,
+        logradouro: rua,
+        numero: numero,
+        complemento: complemento
+      }
+    };
 
-            navegar("/entrar", {replace: true, relative: "path"})
+    const res = await api.register(payload);
+    setLoading(false);
 
-        }
+    if (res.success) {
+      setMensagemSucesso('Cadastro realizado com sucesso! Redirecionando para o login...');
+      setTimeout(() => {
+        navigate('/entrar');
+      }, 1500);
+    } else {
+      setMensagemErro(res.error || 'Erro ao realizar cadastro.');
+    }
+  };
 
-    },[resposta])
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#001f65] via-[#0034a8] to-[#0cc0df] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      
+      {/* Background Dots */}
+      <div className="absolute inset-0 dots-bg opacity-10 pointer-events-none"></div>
 
-    return (
-        <>
-            <div className='container w-full h-[100vh] flex items-center justify-center bg-[#144975] h-[60vh]'>
-                <section className='login-card h-[85vh] w-[60vw] shadow-[0_0_20px_rgba(0,0,0,0.25)] rounded bg-white'>
-                    <h1 className='text-center py-3 text-[1.5rem] text-black'>CADASTRO</h1>
-                    <form className=''>
-                        <div className='grid grid-cols-2 py-2'>
-                            <div className='flex flex-col px-5'>
-                                {/* CPF */}
-                                <div className='input-container flex flex-col text-black'>
-                                    <label htmlFor='cpf'>CPF</label>
-                                    <input className='ring-1 rounded ps-2 py-1'
-                                        type='text'
-                                        name='cpf'
-                                        id='cpf'
-                                        ref={cpfRef}
-                                        required
-                                        value={cpf}
-                                        placeholder='Digite seu CPF (000.000.000-00)'
-                                        onChange={(e) => { setCpf(e.target.value) }}
-                                    />
-                                </div>
-                                <div className="h-4">
-                                    {cpfValidator.isValid(cpf) ?
-                                        <></> :
-                                        cpf.length == 14 ?
-                                            <span className='text-red-500 flex flex-row items-center'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-1">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                                                </svg> CPF inválido</span> :
-                                            <></>
-                                    }
-                                </div>
-                                {/* Nome */}
-                                <div className='input-container flex flex-col mb-4 text-black'>
-                                    <label htmlFor='nome'>Nome</label>
-                                    <input className='ring-1 rounded ps-2 py-1'
-                                        type='text'
-                                        name='nome'
-                                        id='nome'
-                                        required
-                                        value={nome}
-                                        placeholder='Digite seu nome'
-                                        onChange={(e) => { setNome(e.target.value) }} />
-                                </div>
-                                {/* Email */}
-                                <div className='input-container flex flex-col mb-4 text-black'>
-                                    <label htmlFor='email'>E-mail</label>
-                                    <input className='ring-1 rounded ps-2 py-1'
-                                        type='email'
-                                        name='email'
-                                        id='email'
-                                        required
-                                        value={email}
-                                        placeholder='Digite seu email (email@email.com)'
-                                        onChange={(e) => { setEmail(e.target.value) }} />
-                                </div>
-                                {/* Senha */}
-                                <div className='input-container flex flex-col mb-4 text-black'>
-                                    <label htmlFor='password'>Senha</label>
-                                    <input className='ring-1 rounded ps-2 py-1'
-                                        type='password'
-                                        name='password'
-                                        id='password'
-                                        required
-                                        value={senha}
-                                        placeholder='Digite sua senha'
-                                        onChange={(e) => { setSenha(e.target.value) }} />
-                                </div>
-                                {/* Aniversário */}
-                                <div className='input-container flex flex-col text-black'>
-                                    <label htmlFor='nasc'>Data de Nascimento</label>
-                                    <input className='ring-1 rounded ps-2 py-1'
-                                        type='date'
-                                        name='nasc'
-                                        id='nasc'
-                                        required
-                                        value={nasc}
-                                        onChange={(e) => { setNasc(e.target.value) }} />
-                                </div>
-                            </div>
-                            <div className='flex flex-col px-5 text-black'>
-                                {/* CEP */}
-                                <div className='input-container flex flex-col'>
-                                    <label htmlFor='cep'>CEP</label>
-                                    <input className='ring-1 rounded ps-2 py-1 '
-                                        type='text'
-                                        name='cep'
-                                        id='cep'
-                                        ref={cepRef}
-                                        value={cep}
-                                        placeholder='Digite seu CEP (00.000-00)'
-                                        onChange={(e) => { setCep(e.target.value) }} />
-                                </div>
-                                <div className="h-4">
-                                    {cep == 10 ?
-                                        <></> :
-                                        erro ?
-                                            <span className='text-red-500 flex flex-row items-center'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-1">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                                                </svg> CEP inválido </span> :
-                                            <></>
-                                    }
-                                </div>
-                                {/* Bairro */}
-                                <div className='input-container flex flex-col mb-4'>
-                                    <label htmlFor='bairro'>Bairro</label>
-                                    <input className='ring-1 rounded ps-2 py-1 bg-[#efefef] text-[#545454] border-[#767676]'
-                                        type='text'
-                                        name='bairro'
-                                        id='bairro'
-                                        disabled
-                                        value={bairro}
-                                    />
-                                </div>
-                                <div className='input-container flex flex-col mb-4'>
-                                    <div className="grid grid-cols-5 gap-5">
-                                        {/* Cidade */}
-                                        <div className="col-span-4 input-container flex flex-col">
-                                            <label htmlFor='cidade'>Cidade</label>
-                                            <input className='ring-1 rounded ps-2 py-1 bg-[#efefef] text-[#545454] border-[#767676]'
-                                                type='text'
-                                                name='cidade'
-                                                id='cidade'
-                                                disabled
-                                                value={cidade}
-                                            />
-                                        </div>
-                                        {/* Estado */}
-                                        <div className='col-span-1 input-container flex flex-col mb-4'>
-                                            <label htmlFor='uf'>Estado</label>
-                                            <input className='ring-1 rounded ps-2 py-1 bg-[#efefef] text-[#545454] border-[#767676]'
-                                                type='text'
-                                                name='uf'
-                                                id='uf'
-                                                disabled
-                                                value={estado}
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* Rua */}
-                                    <div className="grid grid-cols-5 gap-5">
-                                        <div className='col-span-4 input-container flex flex-col mb-4'>
-                                            <label htmlFor='rua'>Rua</label>
-                                            <input className='ring-1 rounded ps-2 py-1 bg-[#efefef] text-[#545454] border-[#767676]'
-                                                type='text'
-                                                name='rua'
-                                                id='rua'
-                                                disabled
-                                                value={rua}
-                                            />
-                                        </div>
-                                        {/* Número */}
-                                        <div className='col-span-1 input-container flex flex-col mb-4'>
-                                            <label htmlFor='numero'>Número</label>
-                                            <input className='ring-1 rounded ps-2 py-1'
-                                                type='number'
-                                                name='numero'
-                                                id='numero'
-                                                value={numero}
-                                                onChange={(e) => { setNumero(e.target.value) }}
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* Complemento */}
-                                    <div className='input-container flex flex-col'>
-                                        <label htmlFor='complemento'>Complemento</label>
-                                        <input className='ring-1 rounded ps-2 py-1'
-                                            type='text'
-                                            name='complemento'
-                                            id='complemento'
-                                            value={complemento}
-                                            placeholder='Ex: apt 1'
-                                            onChange={(e) => { setComplemento(e.target.value) }}
-                                        />
-                                    </div>
-                                </div>
-                                {/* {cpf.replace(/[.,/#!$%^&*;:{}=\-_`~()?"'']/g, "")} */}
-                            </div>
-                        </div>
-                        <div className="flex justify-center mt-2">
-                            <button type="button" disabled={erro} className={`disabled:bg-black hover:ring-1 hover:ring-[#144975] text-white bg-[#144975] hover:bg-white hover:text-[#144975] px-3 py-2 rounded text-[1rem] hover:shadow-[0_0_5px_#144975] duration-200`} onClick={()=>{enviarCadastro()}}>
-                                Cadastrar
-                            </button>
-                        </div>
-                    </form>
-                    
-                </section>
+      <div className="sm:mx-auto sm:w-full sm:max-w-2xl relative z-10">
+        
+        {/* Header */}
+        <div className="text-center mb-6">
+          <Link to="/" className="inline-flex items-center gap-3 group">
+            <img 
+              src="/images/Logo.jpg" 
+              alt="Conecta Serviços" 
+              className="w-12 h-12 rounded-2xl shadow-lg border-2 border-white/40 group-hover:scale-105 transition-transform" 
+            />
+            <div className="text-left">
+              <h1 className="text-2xl font-black text-white leading-none">
+                Conecta<span className="text-[#0cc0df]">Serviços</span>
+              </h1>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-blue-200">
+                Novo Cadastro
+              </span>
             </div>
-        </>
-    )
+          </Link>
+          <h2 className="mt-3 text-xl font-bold text-white tracking-tight">
+            Crie sua conta no Conecta Serviços
+          </h2>
+          <p className="text-xs text-blue-100">
+            Cadastre seus dados e endereço para contratar ou oferecer serviços
+          </p>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-white p-6 sm:p-8 shadow-2xl rounded-3xl border border-white/20">
+          
+          {mensagemErro && (
+            <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
+              <span>⚠️</span>
+              <span>{mensagemErro}</span>
+            </div>
+          )}
+
+          {mensagemSucesso && (
+            <div className="mb-4 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2">
+              <ShieldCheckIcon className="w-5 h-5 text-emerald-600 shrink-0" />
+              <span>{mensagemSucesso}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            {/* Seção 1: Dados Pessoais */}
+            <div>
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                <UserIcon className="w-4 h-4 text-[#001f65]" />
+                1. Informações Pessoais
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Nome */}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Nome Completo *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Seu nome completo"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                </div>
+
+                {/* CPF */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    CPF *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    ref={cpfRef}
+                    placeholder="000.000.000-00"
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                  {cpf.length === 14 && !cpfValidator.isValid(cpf) && (
+                    <span className="text-[11px] text-rose-600 mt-1 block font-medium">
+                      CPF inválido
+                    </span>
+                  )}
+                </div>
+
+                {/* Data de Nascimento */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Data de Nascimento *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={nasc}
+                    onChange={(e) => setNasc(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                </div>
+
+                {/* E-mail */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    E-mail *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="email@exemplo.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                </div>
+
+                {/* Senha */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Senha (mínimo 8 caracteres) *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    minLength={8}
+                    placeholder="Sua senha secreta"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Seção 2: Endereço Residencial (Obrigatório) */}
+            <div className="pt-4 border-t border-slate-100">
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#0cc0df]"></span>
+                2. Endereço Obrigatório (Para Atendimento)
+              </h3>
+              <p className="text-[11px] text-slate-500 mb-3">
+                Preencha o CEP para preenchimento automático via ViaCEP.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-6 gap-3">
+                {/* CEP */}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    CEP *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      ref={cepRef}
+                      placeholder="00.000-000"
+                      value={cep}
+                      onChange={(e) => setCep(e.target.value)}
+                      className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                    />
+                    {buscandoCep && (
+                      <span className="absolute right-2 top-2 text-[10px] text-blue-600 font-bold">
+                        Buscando...
+                      </span>
+                    )}
+                  </div>
+                  {erroCep && (
+                    <span className="text-[11px] text-rose-600 mt-1 block font-medium">
+                      CEP não encontrado
+                    </span>
+                  )}
+                </div>
+
+                {/* Bairro */}
+                <div className="sm:col-span-4">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Bairro *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Bairro"
+                    value={bairro}
+                    onChange={(e) => setBairro(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 text-slate-800 outline-hidden"
+                  />
+                </div>
+
+                {/* Cidade */}
+                <div className="sm:col-span-4">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Cidade *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Cidade"
+                    value={cidade}
+                    onChange={(e) => setCidade(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 text-slate-800 outline-hidden"
+                  />
+                </div>
+
+                {/* Estado UF */}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    UF *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    maxLength={2}
+                    placeholder="UF"
+                    value={estado}
+                    onChange={(e) => setEstado(e.target.value.toUpperCase())}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 text-slate-800 outline-hidden uppercase"
+                  />
+                </div>
+
+                {/* Rua / Logradouro */}
+                <div className="sm:col-span-4">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Rua / Avenida *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Logradouro"
+                    value={rua}
+                    onChange={(e) => setRua(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 text-slate-800 outline-hidden"
+                  />
+                </div>
+
+                {/* Número */}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Número *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ex: 123"
+                    value={numero}
+                    onChange={(e) => setNumero(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                </div>
+
+                {/* Complemento */}
+                <div className="sm:col-span-6">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Complemento (Opcional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ex: Bloco B, Apto 402, Casa dos Fundos"
+                    value={complemento}
+                    onChange={(e) => setComplemento(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading || erroCep}
+                className="w-full py-3 bg-[#001f65] hover:bg-[#002f99] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
+              >
+                {loading ? "Cadastrando..." : "Finalizar Cadastro"}
+              </button>
+            </div>
+          </form>
+
+          {/* Link to Login */}
+          <div className="mt-6 text-center text-xs text-slate-500">
+            Já possui uma conta?{' '}
+            <Link to="/entrar" className="font-bold text-[#001f65] hover:underline">
+              Fazer login
+            </Link>
+          </div>
+        </div>
+
+        {/* Back to Home */}
+        <div className="mt-6 text-center">
+          <Link to="/" className="text-xs text-blue-100 hover:text-white font-medium hover:underline">
+            ← Voltar para a Página Inicial
+          </Link>
+        </div>
+
+      </div>
+    </div>
+  );
 }
