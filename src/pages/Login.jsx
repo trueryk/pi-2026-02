@@ -37,49 +37,35 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#001f65] via-[#0034a8] to-[#0cc0df] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      
+
       {/* Background Dots */}
       <div className="absolute inset-0 dots-bg opacity-10 pointer-events-none"></div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
-        {/* Brand header */}
-        <div className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-3 group">
-            <img 
-              src="/images/Logo.jpg" 
-              alt="Conecta Serviços" 
-              className="w-12 h-12 rounded-2xl shadow-lg border-2 border-white/40 group-hover:scale-105 transition-transform" 
-            />
-            <div className="text-left">
-              <h1 className="text-2xl font-black text-white leading-none">
-                Conecta<span className="text-[#0cc0df]">Serviços</span>
-              </h1>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-blue-200">
-                Plataforma de Serviços
-              </span>
-            </div>
-          </Link>
-          <h2 className="mt-4 text-xl font-bold text-white tracking-tight">
-            Acesse sua conta
-          </h2>
-          <p className="text-xs text-blue-100">
-            Entre para contratar, gerenciar seus serviços ou montar seu portfólio
-          </p>
-        </div>
-
         {/* Card Form */}
         <div className="bg-white py-8 px-6 sm:px-10 shadow-2xl rounded-3xl border border-white/20">
-          
+          <div className="flex gap-4 justify-center items-center mb-[1rem]">
+            <img
+              src="/images/Logo.jpg"
+              alt="Conecta Serviços"
+              className="w-7 h-7 rounded shadow-lg group-hover:scale-105 transition-transform"
+            />
+            <h2 className="text-xl font-bold text-[#144975] tracking-tight">
+              Entre na sua conta
+            </h2>
+          </div>
           {erro && (
             <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
-              <span>⚠️</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+              </svg>
               <span>{erro}</span>
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+              <label htmlFor="email" className="block font-bold tracking-wider text-[#144975] mb-1">
                 E-mail
               </label>
               <input
@@ -95,13 +81,13 @@ export default function Login() {
 
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label htmlFor="senha" className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                <label htmlFor="senha" className="block font-bold tracking-wider text-[#144975]">
                   Senha
                 </label>
                 <button
                   type="button"
                   onClick={() => setOcultar(!ocultar)}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
+                  className="text-xs text-[#144975] hover:text-blue-800 font-medium cursor-pointer"
                 >
                   {ocultar ? "Mostrar senha" : "Ocultar senha"}
                 </button>
@@ -127,7 +113,7 @@ export default function Login() {
           </form>
 
           {/* Link to Register */}
-          <div className="mt-6 text-center text-xs text-slate-500">
+          <div className="mt-6 text-center text-x text-slate-500">
             Não tem uma conta ainda?{' '}
             <Link to="/cadastrar" className="font-bold text-[#001f65] hover:underline">
               Cadastre-se gratuitamente
@@ -138,8 +124,13 @@ export default function Login() {
 
         {/* Back to Home Link */}
         <div className="mt-6 text-center">
-          <Link to="/" className="text-xs text-blue-100 hover:text-white font-medium hover:underline">
-            ← Voltar para a Página Inicial
+          <Link to="/" className="text-xs text-white px-2 py-1 hover:text-[#001f65] rounded font-medium">
+            <div className="flex items-center justify-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+              </svg>
+              Voltar para a Página Inicial
+            </div>
           </Link>
         </div>
       </div>

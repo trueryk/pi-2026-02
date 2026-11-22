@@ -4,12 +4,12 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { 
-  ArrowLeftIcon, 
-  ShieldCheckIcon, 
-  PlusIcon, 
-  TrashIcon, 
-  ClockIcon 
+import {
+  ArrowLeftIcon,
+  ShieldCheckIcon,
+  PlusIcon,
+  TrashIcon,
+  ClockIcon
 } from '../components/Icons';
 
 const CATEGORIAS_PADRAO = [
@@ -167,12 +167,12 @@ export default function ServiceForm() {
       <Navbar />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        
+
         {/* Back Link */}
         <div className="mb-6">
           <Link
             to={isEditing ? `/servico/${id}` : "/perfil?tab=prestador"}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#001f65]"
+            className="inline-flex items-center gap-1.5  font-semibold text-slate-500 hover:text-[#001f65]"
           >
             <ArrowLeftIcon className="w-4 h-4" />
             <span>Voltar</span>
@@ -184,9 +184,12 @@ export default function ServiceForm() {
           <div className="mb-6 p-5 bg-amber-50 border-2 border-amber-300 rounded-3xl text-amber-900 shadow-sm">
             <div>
               <h4 className="font-bold text-sm flex items-center gap-1.5 text-amber-900">
-                <span>⚠️</span> Status do Prestador: Aguardando Verificação
+                <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                </svg>
+                </span> Status do Prestador: Aguardando Verificação
               </h4>
-              <p className="text-xs text-amber-800 mt-1 leading-relaxed">
+              <p className=" text-amber-800 mt-1 leading-relaxed">
                 Conforme as diretrizes da plataforma, <strong>apenas prestadores com registro verificado</strong> podem publicar ou gerenciar serviços.
               </p>
             </div>
@@ -195,38 +198,35 @@ export default function ServiceForm() {
 
         {/* Form Container */}
         <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xl">
-          
-          <div className="pb-6 border-b border-slate-100">
-            <span className="text-xs uppercase font-bold tracking-wider text-[#0cc0df]">
-              Área do Prestador
-            </span>
+
+          <div className="pb-6  border-slate-100">
             <h1 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
               {isEditing ? 'Editar Serviço Cadastrado' : `Cadastrar Novo Serviço`}
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className=" text-slate-500 mt-0.5">
               Preencha os dados do serviço que ficará visível para os clientes
             </p>
           </div>
 
           {erro && (
-            <div className="my-4 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl font-medium">
+            <div className="my-4 p-3 bg-rose-50 border border-rose-200 text-rose-700  rounded-xl font-medium">
               {erro}
             </div>
           )}
 
           {sucesso && (
-            <div className="my-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-medium flex items-center gap-2">
+            <div className="my-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-800  rounded-xl font-medium flex items-center gap-2">
               <ShieldCheckIcon className="w-4 h-4 text-emerald-600" />
               <span>{sucesso}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-            
+
             {/* Informações Básicas */}
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                <label className="block  font-bold  text-[#001f65]  mb-1">
                   Nome do Serviço *
                 </label>
                 <input
@@ -241,7 +241,7 @@ export default function ServiceForm() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  <label className="block  font-bold   text-[#001f65]  mb-1">
                     Categoria do Serviço *
                   </label>
                   <select
@@ -256,7 +256,7 @@ export default function ServiceForm() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  <label className="block  font-bold   text-[#001f65]  mb-1">
                     Preço (R$) *
                   </label>
                   <div className="relative">
@@ -275,7 +275,7 @@ export default function ServiceForm() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                <label className="block  font-bold   text-[#001f65]  mb-1">
                   Descrição Completa do Serviço *
                 </label>
                 <textarea
@@ -284,17 +284,17 @@ export default function ServiceForm() {
                   placeholder="Descreva detalhadamente o que está incluso no serviço, materiais utilizados, garantia e tempo estimado..."
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
-                  className="w-full p-3 text-xs sm:text-sm rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  className="w-full p-3  sm:text-sm rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
                 />
               </div>
             </div>
 
             {/* Imagens do Serviço */}
-            <div className="pt-4 border-t border-slate-100">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+            <div className="pt-4  border-slate-100">
+              <label className="block  font-bold   text-[#001f65]  mb-1">
                 Fotos do Serviço (URLs de Imagens)
               </label>
-              <p className="text-xs text-slate-500 mb-3">
+              <p className=" text-slate-500 mb-3">
                 Adicione links de fotos do serviço para ilustrar o card e a página de detalhes.
               </p>
 
@@ -304,12 +304,12 @@ export default function ServiceForm() {
                   placeholder="https://exemplo.com/foto-servico.jpg"
                   value={novaImagem}
                   onChange={(e) => setNovaImagem(e.target.value)}
-                  className="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  className="flex-1 px-3.5 py-2  rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
                 />
                 <button
                   type="button"
                   onClick={handleAddImage}
-                  className="px-4 py-2 bg-[#001f65] text-white text-xs font-bold rounded-xl hover:bg-[#0034a8] cursor-pointer"
+                  className="px-4 py-2 bg-[#001f65] text-white  font-bold rounded-xl hover:bg-[#0034a8] cursor-pointer"
                 >
                   Adicionar Foto
                 </button>
@@ -334,11 +334,11 @@ export default function ServiceForm() {
             </div>
 
             {/* Horários Semanais Disponíveis */}
-            <div className="pt-4 border-t border-slate-100">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+            <div className="pt-4  border-slate-100">
+              <label className="block  font-bold   text-[#001f65] mb-1">
                 Horários Semanais de Atendimento
               </label>
-              <p className="text-xs text-slate-500 mb-3">
+              <p className=" text-slate-500 mb-3">
                 Defina em quais dias e turnos os clientes podem agendar este serviço.
               </p>
 
@@ -346,7 +346,7 @@ export default function ServiceForm() {
                 <select
                   value={novoDia}
                   onChange={(e) => setNovoDia(e.target.value)}
-                  className="px-3 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800 bg-white"
+                  className="px-3 py-2  rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800 bg-white"
                 >
                   {DIAS_SEMANA.map(d => (
                     <option key={d} value={d}>{d}</option>
@@ -358,13 +358,13 @@ export default function ServiceForm() {
                   placeholder="Ex: 08:00 - 12:00"
                   value={novoHorario}
                   onChange={(e) => setNovoHorario(e.target.value)}
-                  className="px-3 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
+                  className="px-3 py-2  rounded-xl border border-slate-300 focus:border-[#001f65] outline-hidden text-slate-800"
                 />
 
                 <button
                   type="button"
                   onClick={handleAddSlot}
-                  className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl hover:bg-slate-900 cursor-pointer"
+                  className="px-4 py-2 bg-slate-800 text-white  font-bold rounded-xl hover:bg-slate-900 cursor-pointer"
                 >
                   + Inserir Horário
                 </button>
@@ -373,7 +373,7 @@ export default function ServiceForm() {
               {/* Slots List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {disponibilidades.map((slot, idx) => (
-                  <div key={idx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
+                  <div key={idx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between ">
                     <div>
                       <span className="font-bold text-slate-800">{slot.diaSemana}</span>
                       <span className="text-slate-500 ml-2">({slot.horario})</span>
@@ -391,7 +391,7 @@ export default function ServiceForm() {
             </div>
 
             {/* Ativo toggle */}
-            <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+            <div className="pt-4  border-slate-100 flex items-center gap-3">
               <input
                 type="checkbox"
                 id="ativo"
@@ -399,23 +399,23 @@ export default function ServiceForm() {
                 onChange={(e) => setAtivo(e.target.checked)}
                 className="w-4 h-4 text-[#001f65] rounded"
               />
-              <label htmlFor="ativo" className="text-xs font-bold text-slate-800 cursor-pointer">
+              <label htmlFor="ativo" className=" font-bold text-slate-800 cursor-pointer">
                 Serviço Ativo e Disponível para Contratação
               </label>
             </div>
 
             {/* Submit & Cancel Actions */}
-            <div className="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+            <div className="pt-6  border-slate-100 flex items-center justify-end gap-3">
               <Link
                 to="/perfil?tab=prestador"
-                className="px-5 py-2.5 rounded-full border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50"
+                className="px-5 py-2.5 rounded-full border border-slate-200 text-[#001f65]   font-semibold hover:bg-slate-50"
               >
                 Cancelar
               </Link>
               <button
                 type="submit"
                 disabled={submitting || !isVerifiedProvider}
-                className="px-8 py-3 bg-[#001f65] hover:bg-[#002f99] text-white text-xs font-bold rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                className="px-8 py-3 bg-[#001f65] hover:bg-[#002f99] text-white  font-bold rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
               >
                 {submitting ? 'Salvando...' : isEditing ? 'Atualizar Serviço' : 'Publicar Serviço no Site'}
               </button>

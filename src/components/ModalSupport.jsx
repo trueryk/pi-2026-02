@@ -27,16 +27,16 @@ export default function ModalSupport({ onClose }) {
               <CheckCircleIcon className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-1">Chamado Aberto!</h3>
-            <p className="text-xs text-slate-500 mb-3">
+            <p className=" text-slate-500 mb-3">
               Protocolo: <strong className="text-slate-800 font-mono text-sm">{protocolo}</strong>
             </p>
-            <p className="text-xs text-slate-600 mb-6 leading-relaxed">
+            <p className=" text-slate-600 mb-6 leading-relaxed">
               Recebemos sua mensagem com sucesso. Nossa equipe de suporte responderá para o e-mail <strong>{email}</strong> em até 24 horas úteis.
             </p>
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2.5 rounded-full bg-[#001f65] text-white text-xs font-bold shadow-md cursor-pointer hover:bg-[#0034a8]"
+              className="px-6 py-2.5 rounded-full bg-[#001f65] text-white  font-bold shadow-md cursor-pointer hover:bg-[#0034a8]"
             >
               Concluir
             </button>
@@ -46,11 +46,11 @@ export default function ModalSupport({ onClose }) {
             <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-xl bg-blue-50 text-[#001f65]">
-                  <HelpCircleIcon className="w-5 h-5 text-[#0cc0df]" />
+                  <HelpCircleIcon className="w-5 h-5 text-[#001f65]" />
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Suporte Conecta Serviços</h3>
-                  <p className="text-xs text-slate-500">Estamos aqui para ajudar você</p>
+                  <p className=" text-slate-500">Estamos aqui para ajudar você</p>
                 </div>
               </div>
               <button
@@ -64,13 +64,13 @@ export default function ModalSupport({ onClose }) {
 
             <div className="mt-4 space-y-3.5">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                <label className="block  font-bold   text-[#001f65] mb-1">
                   Qual é o motivo do contato?
                 </label>
                 <select
                   value={categoria}
                   onChange={(e) => setCategoria(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-slate-700 bg-white"
+                  className="w-full px-3 py-2  rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-[#001f65] bg-white"
                 >
                   <option value="Dúvida sobre contratação">Dúvida sobre contratação de serviço</option>
                   <option value="Problema com prestador">Problema com prestador ou atendimento</option>
@@ -82,7 +82,7 @@ export default function ModalSupport({ onClose }) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                <label className="block  font-bold   text-[#001f65] mb-1">
                   Seu e-mail para retorno
                 </label>
                 <input
@@ -91,12 +91,12 @@ export default function ModalSupport({ onClose }) {
                   placeholder="exemplo@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-slate-700"
+                  className="w-full px-3 py-2  rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-[#001f65]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                <label className="block  font-bold   text-[#001f65] mb-1">
                   Descreva sua solicitação
                 </label>
                 <textarea
@@ -105,7 +105,7 @@ export default function ModalSupport({ onClose }) {
                   placeholder="Explique com detalhes o que aconteceu ou qual é sua dúvida..."
                   value={mensagem}
                   onChange={(e) => setMensagem(e.target.value)}
-                  className="w-full p-2.5 text-xs rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-slate-700 placeholder-slate-600"
+                  className="w-full p-2.5  rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-[#001f65] placeholder-slate-600"
                 />
               </div>
             </div>
@@ -114,13 +114,13 @@ export default function ModalSupport({ onClose }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-full border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer"
+                className="px-4 py-2 rounded-full border border-slate-200 text-[#001f65]  font-semibold hover: cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-[#001f65] hover:bg-[#0034a8] text-white text-xs font-bold rounded-full shadow-md cursor-pointer"
+                className="px-6 py-2.5 bg-[#001f65] hover:bg-[#0034a8] text-white  font-bold rounded-full shadow-md cursor-pointer"
               >
                 Enviar Mensagem
               </button>

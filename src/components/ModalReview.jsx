@@ -38,13 +38,13 @@ export default function ModalReview({ contract, onClose, onReviewed }) {
       <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
         <div className="flex justify-between items-start pb-4 border-b border-slate-100">
           <div>
-            <span className="text-xs uppercase font-bold tracking-wider text-[#0cc0df]">
+            <span className=" uppercase font-bold  text-[#001f65]">
               Avaliação do Serviço
             </span>
             <h3 className="text-lg font-bold text-slate-900">
               {contract.servicoNome || "Serviço Concluído"}
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className=" text-slate-500">
               Prestador: {contract.prestadorNome || "Profissional"}
             </p>
           </div>
@@ -58,14 +58,14 @@ export default function ModalReview({ contract, onClose, onReviewed }) {
         </div>
 
         {error && (
-          <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl">
+          <div className="my-3 p-3 bg-rose-50 border border-rose-200 text-rose-700  rounded-xl">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-          <div className="text-center py-2 bg-slate-50 rounded-2xl border border-slate-100">
-            <label className="block text-xs font-semibold text-slate-600 mb-2">
+          <div className="text-center py-2  rounded-2xl border border-slate-100">
+            <label className="block  font-semibold text-slate-600 mb-2">
               Toque nas estrelas para avaliar:
             </label>
             <div className="flex justify-center">
@@ -77,13 +77,13 @@ export default function ModalReview({ contract, onClose, onReviewed }) {
                 showNumber={true}
               />
             </div>
-            <p className="text-xs text-slate-400 mt-2 font-medium">
-              {nota === 5 ? '⭐ Excelente' : nota >= 4 ? '👍 Muito Bom' : nota >= 3 ? '👌 Regular' : '👎 Insatisfeito'}
+            <p className=" text-slate-400 mt-2 font-medium">
+              {nota === 5 ? 'Excelente' : nota >= 4 ? 'Muito Bom' : nota >= 3 ? 'Regular' : 'Insatisfeito'}
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+            <label className="block  font-bold uppercase  text-[#001f65] mb-1.5">
               Seu Depoimento / Comentário:
             </label>
             <textarea
@@ -92,7 +92,7 @@ export default function ModalReview({ contract, onClose, onReviewed }) {
               placeholder="Conte como foi sua experiência com o serviço e a pontualidade do profissional..."
               value={comentario}
               onChange={(e) => setComentario(e.target.value)}
-              className="w-full p-3 text-xs rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-slate-700 placeholder-slate-600"
+              className="w-full p-3  rounded-xl border border-slate-200 focus:border-[#001f65] outline-hidden text-[#001f65] placeholder-slate-600"
             />
           </div>
 
@@ -100,14 +100,14 @@ export default function ModalReview({ contract, onClose, onReviewed }) {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-full border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer"
+              className="px-4 py-2 rounded-full border border-slate-200 text-[#001f65]  font-semibold hover: cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-full shadow-md cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white  font-bold rounded-full shadow-md cursor-pointer disabled:opacity-50"
             >
               {submitting ? 'Enviando...' : 'Publicar Avaliação'}
             </button>

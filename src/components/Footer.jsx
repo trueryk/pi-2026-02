@@ -28,7 +28,7 @@ export default function Footer() {
           
           {/* Categorias Col */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-4">
+            <h4 className="text-white font-semibold text-xs uppercase  mb-4">
               Categorias Populares
             </h4>
             <ul className="space-y-2.5 text-xs">
@@ -42,7 +42,7 @@ export default function Footer() {
 
           {/* Navegação Col */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-4">
+            <h4 className="text-white font-semibold text-xs uppercase  mb-4">
               Navegação
             </h4>
             <ul className="space-y-2.5 text-xs">
@@ -56,7 +56,7 @@ export default function Footer() {
 
           {/* Atendimento Col */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-4">
+            <h4 className="text-white font-semibold text-xs uppercase  mb-4">
               Atendimento
             </h4>
             <ul className="space-y-2.5 text-xs">

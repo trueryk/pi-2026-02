@@ -54,7 +54,7 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
               <div className="flex flex-col">
                 <div className="text-xl font-black tracking-tight leading-none">
                   <span className="text-[#001f65]">Conecta</span>
-                  <span className="text-[#0cc0df]">Serviços</span>
+                  <span className="text-[#001f65]">Serviços</span>
                 </div>
               </div>
             </Link>
@@ -67,7 +67,7 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
                   placeholder="Qual serviço você procura hoje? (ex: Eletricista, Limpeza, Aulas...)"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-11 pr-24 py-2.5 bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-sm rounded-full border border-slate-300 focus:border-[#001f65] focus:ring-2 focus:ring-[#0cc0df]/20 transition-all outline-hidden text-slate-800 placeholder-slate-600"
+                  className="w-full pl-11 pr-24 py-2.5  hover:bg-slate-100/70 focus:bg-white text-sm rounded-full border border-slate-300 focus:border-[#001f65] focus:ring-2 focus:ring-[#0cc0df]/20 transition-all outline-hidden text-slate-800 placeholder-slate-600"
                 />
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                   <SearchIcon className="w-5 h-5" />
@@ -88,10 +88,10 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
               <button
                 type="button"
                 onClick={() => setShowSupport(true)}
-                className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-600 hover:text-[#001f65] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-[#001f65] hover:text-white rounded-lg transition-colors cursor-pointer"
                 title="Fale com nosso suporte"
               >
-                <HelpCircleIcon className="w-4 h-4 text-[#0cc0df]" />
+                <HelpCircleIcon className="w-4 h-4" />
                 <span>Suporte</span>
               </button>
 
@@ -137,13 +137,6 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
                       <p className="text-xs font-bold text-slate-800 leading-tight">
                         {user?.name?.split(' ')[0] || 'Usuário'}
                       </p>
-                      <p className="text-[10px] text-slate-500 font-medium">
-                        {isVerifiedProvider 
-                          ? '✓ Prestador' 
-                          : isProvider 
-                            ? '⏳ Em Análise' 
-                            : 'Cliente'}
-                      </p>
                     </div>
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#001f65] to-[#0cc0df] text-white flex items-center justify-center font-bold text-xs uppercase shadow-xs">
                       {user?.name ? user.name[0] : 'U'}
@@ -156,7 +149,7 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
                       className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 text-sm animate-in fade-in slide-in-from-top-2 duration-150"
                       onClick={() => setMenuOpen(false)}
                     >
-                      <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/50">
+                      <div className="px-4 py-3 border-b border-slate-100 /50">
                         <p className="font-bold text-slate-900 truncate">{user?.name}</p>
                         <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                         {isProvider && (
@@ -170,21 +163,21 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
                       <div className="py-1">
                         <Link
                           to="/perfil?tab=dados"
-                          className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#001f65]"
+                          className="flex items-center gap-2.5 px-4 py-2 text-[#001f65] hover: hover:text-[#001f65]"
                         >
                           <UserIcon className="w-4 h-4 text-slate-400" />
                           <span>Meu Perfil</span>
                         </Link>
                         <Link
                           to="/perfil?tab=contratos"
-                          className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#001f65]"
+                          className="flex items-center gap-2.5 px-4 py-2 text-[#001f65] hover: hover:text-[#001f65]"
                         >
                           <BriefcaseIcon className="w-4 h-4 text-slate-400" />
                           <span>Serviços Contratados</span>
                         </Link>
                         <Link
                           to="/perfil?tab=favoritos"
-                          className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 hover:text-[#001f65]"
+                          className="flex items-center gap-2.5 px-4 py-2 text-[#001f65] hover: hover:text-[#001f65]"
                         >
                           <HeartIcon className="w-4 h-4 text-slate-400" />
                           <span>Meus Interesses ({favorites.length})</span>
@@ -202,7 +195,7 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
                             </Link>
                             <Link
                               to="/servicos/novo"
-                              className="flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50"
+                              className="flex items-center gap-2.5 px-4 py-2 text-[#001f65] hover:"
                             >
                               <PlusIcon className="w-4 h-4 text-slate-400" />
                               <span>Criar Novo Serviço</span>
@@ -222,7 +215,7 @@ export default function Navbar({ onSearch, currentSearch = '' }) {
                         <button
                           type="button"
                           onClick={() => setShowSupport(true)}
-                          className="w-full flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 text-left"
+                          className="w-full flex items-center gap-2.5 px-4 py-2 text-[#001f65] hover: text-left"
                         >
                           <HelpCircleIcon className="w-4 h-4 text-slate-400" />
                           <span>Suporte e Ajuda</span>
